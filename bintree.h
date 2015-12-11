@@ -62,13 +62,28 @@ int getword(char *word, int lim);
  * 
  * @param p pointer to the node at which to start printing
  */
-void treeprint(node *p)
+void treeprint(node *p);
 
 /**
  * @brief Frees all memory being used by the tree from node p and down
  * 
  * @param p node to start freeing at
  */
-void free_tree(node *p)
+void free_tree(node *p);
+
+/**
+ * @brief Get a character from the string
+ *        From K&R
+ * @return the character
+ */
+int getch(void);
+
+/**
+ * @brief Push a character back onto the string
+ *        From K&R
+ * 
+ * @param c character to push back
+ */
+void ungetch(int c);
 
 #endif // BINTREE_H
