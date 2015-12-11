@@ -46,6 +46,17 @@ void outputTree(char* outfile);
 node* addNode(struct node *p, char *w);
 
 /**
+ * @brief Gets a word from a string.
+ *        From K&R
+ * 
+ * @param word pointer to the string to read from
+ * @param lim maximum length of a word
+ * 
+ * @return first character in the word
+ */
+int getword(char *word, int lim);
+
+/**
  * @brief Print the binary tree.
  *        From K&R
  * 
