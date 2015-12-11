@@ -55,3 +55,12 @@ void treeprint(node *p) {
         treeprint(p->right);
     }
 }
+
+void free_tree(node *p) {
+    if(p != NULL) {
+        free_tree(p->left);
+        free_tree(p->right);
+        free( p->word );
+        free( p );
+    }
+}

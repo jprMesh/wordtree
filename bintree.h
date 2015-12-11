@@ -53,4 +53,11 @@ node* addNode(struct node *p, char *w);
  */
 void treeprint(node *p)
 
+/**
+ * @brief Frees all memory being used by the tree from node p and down
+ * 
+ * @param p node to start freeing at
+ */
+void free_tree(node *p)
+
 #endif // BINTREE_H
