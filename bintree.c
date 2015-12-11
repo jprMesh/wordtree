@@ -47,3 +47,11 @@ node* addNode(struct node *p, char *w) {
 
     return p;
 }
+
+void treeprint(node *p) {
+    if (p != NULL) {
+        treeprint(p->left);
+        printf("%6d  %s\n", p->count, p->word);
+        treeprint(p->right);
+    }
+}

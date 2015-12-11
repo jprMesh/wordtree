@@ -36,6 +36,7 @@ void outputTree(char* outfile);
 /**
  * @brief Adds a node to the tree if word is new, otherwise increments count on
  *        pre-existing node.
+ *        From K&R
  * 
  * @param node pointer to the node under which to search
  * @param w string containing word to add
@@ -43,5 +44,13 @@ void outputTree(char* outfile);
  * @return pointer to the node that was modified.
  */
 node* addNode(struct node *p, char *w);
+
+/**
+ * @brief Print the binary tree.
+ *        From K&R
+ * 
+ * @param p pointer to the node at which to start printing
+ */
+void treeprint(node *p)
 
 #endif // BINTREE_H
