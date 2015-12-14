@@ -51,26 +51,27 @@ void outputTree(char* outfile) {
     free_tree(root);
 }
 
-node* addNode(node *p, char *w) {
+node* addNode(node **p, char *w) {
     int cond;
-
-    if (p == NULL) {
-        p = malloc(sizeof(node)); // allocates memory for the new node
-        p -> word = strdup(w);
-        p -> count = 1;
-        p -> left = p -> right = NULL;
+	node *x = *p;
+	
+    if (x == NULL) {
+        x = malloc(sizeof(node)); // allocates memory for the new node
+        x -> word = strdup(w);
+        x -> count = 1;
+        x -> left = x -> right = NULL;
     }
 
-    else if ((cond = strcmp(w, p -> word)) == 0)
-        p -> count++;
+    else if ((cond = strcmp(w, x -> word)) == 0)
+        x -> count++;
 
     else if (cond < 0)
-        p -> left = addNode(p -> left, w);
+        x -> left = addNode(x -> left, w);
 
     else
-        p -> right = addNode(p -> right, w);
+        x -> right = addNode(x -> right, w);
 
-    return p;
+    return x;
 }
 
 char* stringsplit(char* *buf) {
