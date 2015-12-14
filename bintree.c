@@ -32,10 +32,11 @@ int readintoTree(char* infile) {
     }
     char* word;
     char* spot = buffer;
-    while((word = stringsplit(&spot))) {
-        strip(&word);
-        printf("word: %s\n", word);
-        addNode(root, word);
+    while ((word = stringsplit(&spot))) {
+        if (strip(&word)) {
+            addNode(root, word);
+            printf("word: %s\n", word);
+        }
     }
     free(buffer);
     return 1;
@@ -98,13 +99,19 @@ void free_tree(node *p) {
     }
 }
 
-void strip(char* *word) {
+int strip(char* *word) {
+    int length = strlen(*word);
     while (!isalphanum((*word)[0])) {
         ++*word;
+        --length;
+        if (length == 0)
+            return 0;
     }
-    while (!isalphanum((*word)[strlen(*word)-2])) {
-        *word[strlen(*word)-2] = '\0';
+    printf("%c\n", (*word)[length-1]);
+    while (!isalphanum((*word)[length-1])) {
+        (*word)[strlen(*word)-2] = '\0';
     }
+    return 1;
 }
 
 int isalphanum(char ch) {

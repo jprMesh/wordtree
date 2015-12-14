@@ -84,8 +84,10 @@ char* stringsplit(char **buf);
  * @brief Strip non-alphanumeric characters from both ends of the string.
  * 
  * @param word string to be stripped
+ * @return 1 if there is a word to add
+ * @return 0 if no word is left
  */
-void strip(char* *word);
+int strip(char* *word);
 
 /**
  * @brief get whether the character is alphanumeric
