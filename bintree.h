@@ -43,7 +43,7 @@ void outputTree(char* outfile);
  * 
  * @return pointer to the node that was modified.
  */
-node* addNode(struct node *p, char *w);
+node* addNode(node *p, char *w);
 
 /**
  * @brief Gets a word from a string.
@@ -61,8 +61,9 @@ int getword(char *word, int lim);
  *        From K&R
  * 
  * @param p pointer to the node at which to start printing
+ * @param file file to output to
  */
-void treeprint(node *p);
+void treeprint(node *p, FILE *file);
 
 /**
  * @brief Frees all memory being used by the tree from node p and down
@@ -72,18 +73,11 @@ void treeprint(node *p);
 void free_tree(node *p);
 
 /**
- * @brief Get a character from the string
- *        From K&R
- * @return the character
- */
-int getch(void);
-
-/**
- * @brief Push a character back onto the string
- *        From K&R
+ * @brief Split a word off the input buffer and return it.
  * 
- * @param c character to push back
+ * @param buf buffer with words in it.
+ * @return first word in buffer.
  */
-void ungetch(int c);
+char* stringsplit(char **buf);
 
 #endif // BINTREE_H

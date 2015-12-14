@@ -1,39 +1,63 @@
 // Jonas Rogers - Mona Yuan - CS 2301 - Assignment 6 - 12/10/2015
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "bintree.h"
 
+#define BUFSIZE 100
 node *root;
 
 void initTree() {
-    ;
+    root = NULL;
+    printf("Initializing.\n");
 }
 
 int readintoTree(char* infile) {
+    printf("Reading %s\n", infile);
     FILE *in = fopen(infile, "r");
-    if (in) {
-        
-        fclose(in);
+    if (!in) {
+        printf("Error reading file.\n");
+        return 0;
     }
-    return 0;
+    fseek(in, 0, SEEK_END);
+    int filelen = ftell(in);
+    rewind(in);
+    char* buffer = (char*) malloc(filelen);
+    int result = fread(buffer, 1, filelen, in);
+    fclose(in);
+    if (result != filelen) {
+        printf("Error reading file.\n");
+        return 0;
+    }
+    char* word;
+    char* spot = buffer;
+    while((word = stringsplit(&spot))) {
+        printf("word: %s\n", word);
+        addNode(root, word);
+    }
+    free(buffer);
+    return 1;
 }
 
 void outputTree(char* outfile) {
     FILE *out = fopen(outfile, "w");
     if (out) {
-        // do stuff
+        treeprint(root, out);
         fclose(out);
     }
+    free_tree(root);
 }
 
-node* addNode(struct node *p, char *w) {
+node* addNode(node *p, char *w) {
     int cond;
 
-    if(p == NULL) {
+    if (p == NULL) {
         p = malloc(sizeof(node)); // allocates memory for the new node
         p -> word = strdup(w);
         p -> count = 1;
         p -> left = p -> right = NULL;
+        printf("new root: %s\n", p->word);
     }
 
     else if ((cond = strcmp(w, p -> word)) == 0)
@@ -48,33 +72,20 @@ node* addNode(struct node *p, char *w) {
     return p;
 }
 
-int getword(char *word, int lim) {
-    int c, getch(void);
-    void ungetch(int);
-    char *w = word;
-
-    while(isspace(c = getch()))
-        ;
-    if(c != EOF)
-        *w++ = c;
-    if(!isalpha(c)) {
-        *w = '\0';
-        return c;
-    }
-    for( ; --lim > 0; w++)
-        if(!isalnum(*w = getch())) {
-            ungetch(*w);
-            break;
-        }
-    *w = '\0';
-    return word[0];
+char* stringsplit(char **buf) {
+    char* word = strtok(*buf, " ,.-\t\n");
+    if (!word)
+        return 0;
+    *buf += strlen(word) + 1;
+    return word;
 }
 
-void treeprint(node *p) {
+void treeprint(node *p, FILE *file) {
     if (p != NULL) {
-        treeprint(p->left);
-        printf("%6d  %s\n", p->count, p->word);
-        treeprint(p->right);
+        treeprint(p->left, file);
+        printf("%6ld  %s\n", p->count, p->word);
+        //fprintf(file, "%6ld  %s\n", p->count, p->word);
+        treeprint(p->right, file);
     }
 }
 
@@ -85,15 +96,4 @@ void free_tree(node *p) {
         free( p->word );
         free( p );
     }
-}
-
-int getch(void) {
-    return (bufp > 0) ? buf[--bufp] : getchar();
-}
-
-void ungetch(int c) {
-    if (bufp >= BUFSIZE)
-         printf("ungetch: too many characters\n");
-    else
-         buf[bufp++] = c;
 }
