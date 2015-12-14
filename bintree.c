@@ -33,6 +33,7 @@ int readintoTree(char* infile) {
     char* word;
     char* spot = buffer;
     while((word = stringsplit(&spot))) {
+        strip(&word);
         printf("word: %s\n", word);
         addNode(root, word);
     }
@@ -57,7 +58,6 @@ node* addNode(node *p, char *w) {
         p -> word = strdup(w);
         p -> count = 1;
         p -> left = p -> right = NULL;
-        printf("new root: %s\n", p->word);
     }
 
     else if ((cond = strcmp(w, p -> word)) == 0)
@@ -72,7 +72,7 @@ node* addNode(node *p, char *w) {
     return p;
 }
 
-char* stringsplit(char **buf) {
+char* stringsplit(char* *buf) {
     char* word = strtok(*buf, " ,.-\t\n");
     if (!word)
         return 0;
@@ -96,4 +96,17 @@ void free_tree(node *p) {
         free( p->word );
         free( p );
     }
+}
+
+void strip(char* *word) {
+    while (!isalphanum((*word)[0])) {
+        ++*word;
+    }
+    while (!isalphanum((*word)[strlen(*word)-2])) {
+        *word[strlen(*word)-2] = '\0';
+    }
+}
+
+int isalphanum(char ch) {
+    return (ch >= 48 && ch <= 57) || (ch >= 65 && ch <= 90) || (ch >= 97 && ch <= 122);
 }

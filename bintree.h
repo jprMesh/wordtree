@@ -80,4 +80,20 @@ void free_tree(node *p);
  */
 char* stringsplit(char **buf);
 
+/**
+ * @brief Strip non-alphanumeric characters from both ends of the string.
+ * 
+ * @param word string to be stripped
+ */
+void strip(char* *word);
+
+/**
+ * @brief get whether the character is alphanumeric
+ * 
+ * @param ch character to evaluate
+ * @return 1 if ch is alphanumeric
+ * @return 0 if ch is not alphanumeric
+ */
+int isalphanum(char ch);
+
 #endif // BINTREE_H
