@@ -8,10 +8,12 @@
 
 #define BUFSIZE 100
 node *root;
+int wordcount;
 
 void initTree() {
-    root = NULL;
     printf("Initializing.\n");
+    root = NULL;
+    wordcount = 0;
 }
 
 int readintoTree(char* infile) {
@@ -33,13 +35,15 @@ int readintoTree(char* infile) {
     }
     char* word;
     char* spot = buffer;
-    while ((word = stringsplit(&spot))) {
-        if (strip(&word)) {
-            for (int i = 0; i < strlen(word); ++i)
-                word[i] = tolower(word[i]);
-            node *temp = addNode(root, word);
-            if (root == NULL)
-                root = temp;
+    while (spot < buffer + filelen) {
+        if ((word = getword(&spot))) {
+            if (strip(&word)) {
+                for (int i = 0; i < strlen(word); ++i)
+                    word[i] = tolower(word[i]);
+                node *temp = addNode(root, word);
+                if (root == NULL)
+                    root = temp;
+            }
         }
     }
     free(buffer);
@@ -47,9 +51,12 @@ int readintoTree(char* infile) {
 }
 
 void outputTree(char* outfile) {
+    printf("Outputting tree to file %s\n", outfile);
     FILE *out = fopen(outfile, "w");
     if (out) {
         treeprint(root, out);
+        fprintf(out, "----------------------------------------\n");
+        fprintf(out, "%6d  Total number of unique words\n", wordcount);
         fclose(out);
     }
     free_tree(root);
@@ -63,6 +70,7 @@ node* addNode(node *p, char *w) {
         p -> word = strdup(w);
         p -> count = 1;
         p -> left = p -> right = NULL;
+        ++wordcount;
     }
 
     else if ((cond = strcmp(w, p -> word)) == 0)
@@ -77,10 +85,12 @@ node* addNode(node *p, char *w) {
     return p;
 }
 
-char* stringsplit(char* *buf) {
-    char* word = strtok(*buf, " ,.-\t\n");
-    if (!word)
+char* getword(char **buf) {
+    char* word = strtok(*buf, " /\n");
+    if (!word) {
+        *buf += 1;
         return 0;
+    }
     *buf += strlen(word) + 1;
     return word;
 }
@@ -88,8 +98,8 @@ char* stringsplit(char* *buf) {
 void treeprint(node *p, FILE *file) {
     if (p != NULL) {
         treeprint(p->left, file);
-        printf("%6ld  %s\n", p->count, p->word);
-        //fprintf(file, "%6ld  %s\n", p->count, p->word);
+        // printf("%6ld  %s\n", p->count, p->word);
+        fprintf(file, "%6ld  %s\n", p->count, p->word);
         treeprint(p->right, file);
     }
 }

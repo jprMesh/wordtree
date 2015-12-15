@@ -46,17 +46,6 @@ void outputTree(char* outfile);
 node* addNode(node *p, char *w);
 
 /**
- * @brief Gets a word from a string.
- *        From K&R
- * 
- * @param word pointer to the string to read from
- * @param lim maximum length of a word
- * 
- * @return first character in the word
- */
-int getword(char *word, int lim);
-
-/**
  * @brief Print the binary tree.
  *        From K&R
  * 
@@ -78,7 +67,7 @@ void free_tree(node *p);
  * @param buf buffer with words in it.
  * @return first word in buffer.
  */
-char* stringsplit(char **buf);
+char* getword(char **buf);
 
 /**
  * @brief Strip non-alphanumeric characters from both ends of the string.
