@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "bintree.h"
 
 #define BUFSIZE 100
@@ -34,8 +35,11 @@ int readintoTree(char* infile) {
     char* spot = buffer;
     while ((word = stringsplit(&spot))) {
         if (strip(&word)) {
-            addNode(root, word);
-            printf("word: %s\n", word);
+            for (int i = 0; i < strlen(word); ++i)
+                word[i] = tolower(word[i]);
+            node *temp = addNode(root, word);
+            if (root == NULL)
+                root = temp;
         }
     }
     free(buffer);
@@ -51,27 +55,26 @@ void outputTree(char* outfile) {
     free_tree(root);
 }
 
-node* addNode(node **p, char *w) {
+node* addNode(node *p, char *w) {
     int cond;
-	node *x = *p;
-	
-    if (x == NULL) {
-        x = malloc(sizeof(node)); // allocates memory for the new node
-        x -> word = strdup(w);
-        x -> count = 1;
-        x -> left = x -> right = NULL;
+
+    if (p == NULL) {
+        p = malloc(sizeof(node)); // allocates memory for the new node
+        p -> word = strdup(w);
+        p -> count = 1;
+        p -> left = p -> right = NULL;
     }
 
-    else if ((cond = strcmp(w, x -> word)) == 0)
-        x -> count++;
+    else if ((cond = strcmp(w, p -> word)) == 0)
+        p -> count++;
 
     else if (cond < 0)
-        x -> left = addNode(x -> left, w);
+        p -> left = addNode(p -> left, w);
 
     else
-        x -> right = addNode(x -> right, w);
+        p -> right = addNode(p -> right, w);
 
-    return x;
+    return p;
 }
 
 char* stringsplit(char* *buf) {
@@ -108,9 +111,9 @@ int strip(char* *word) {
         if (length == 0)
             return 0;
     }
-    printf("%c\n", (*word)[length-1]);
     while (!isalphanum((*word)[length-1])) {
-        (*word)[strlen(*word)-2] = '\0';
+        (*word)[strlen(*word)-1] = '\0';
+        length = strlen(*word);
     }
     return 1;
 }
